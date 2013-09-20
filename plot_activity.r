@@ -45,7 +45,7 @@ q1t
 
 # Histogram of all quiz submissions
 q1th <- ggplot(daily, aes(x=date, y=quiz_quiz_total, group=session)) 
-q1th <- q1th + geom_histogram(binwidth=.5, colour="black", fill="white", stat="identity")
+q1th <- q1th + geom_bar(binwidth=.5, colour="black", fill="white", stat="identity")
 q1th <- q1th + labs(title = "Total Quiz 1 Submissions by Date", x = "Date", y = "Quiz Submissions") 
 q1th
 
