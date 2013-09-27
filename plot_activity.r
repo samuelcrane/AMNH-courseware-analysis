@@ -3,58 +3,45 @@
 # https://github.com/samuelcrane
 #
 # R code
-# Updated: 2013-09-19
+# Updated: 2013-09-27
 # Time Series plots for weekly or daily activity data from Coursera MOOC data
 # Transpose the CSV file before reading it. 
 
-# Read in time series activity data
-daily <- read.csv("week1/daily_week1.csv")
+library('ggplot2')
 
-# Create group column (or do it in Excel)
-daily <- cbind(daily, session = "amnhgenetics001")
+# Read in and parse daily activity
+# Before this step, I've transposed the CSV file that Coursera provides under the Activity->Daily download.
+daily <- read.csv("/Week3/plot/input/daily.csv")
 
-# Unique forum posts and comments
-fcq <- ggplot(daily, aes(x=date, y=forum_combined_unique, group=session)) + geom_line()
-fcq <- fcq + labs(title = "Individual People Visitng the Forum") 
-fcq
+# Subset the data by a week or a few days
+daily_slice <- daily[149:152,]
+daily_slice <- cbind(daily_slice, session = "amnhgenetics001")
 
-# Total forum posts and comments
-fct <- ggplot(daily, aes(x=date, y=forum_combined_total, group=session)) + geom_line()
-fct <- fct + labs(title = "Total Forum Activity by Date") 
-fct
+# Combined plot of weekly activity
+snapshot <- ggplot(daily_slice, aes(x=item, colour = Activity)) 
+snapshot <- snapshot + geom_line(aes(y=registrations, group=session, colour = "registrations"), size = 1)
+snapshot <- snapshot + geom_line(aes(y=quiz_quiz_total, group=session, colour = "quiz"), size = 1)
+snapshot <- snapshot + geom_line(aes(y=lecture_view_total, group=session, colour = "lectures"), size = 1)
+snapshot <- snapshot + geom_line(aes(y=forum_comment_total+forum_post_total, group=session, colour = "forum"), size = 1)
+snapshot <- snapshot + labs(title = "Weekly Activity", y="") 
+snapshot
 
-# Total lecture views and downloads
-lct <- ggplot(daily, aes(x=date, y=lecture_combined_total, group=session)) + geom_line()
-lct <- lct + labs(title = "Total Video Views and Downloads") 
-lct
+# Total lecture activity
+lectures <- ggplot(daily_slice, aes(x=item, colour = Activity)) 
+lectures <- lectures + geom_line(aes(y=lecture_view_total, group=session, colour = "lecture views"), size = 1)
+lectures <- lectures + geom_line(aes(y=lecture_download_total, group=session, colour = "lecture downloads"), size = 1)
+lectures <- lectures + labs(title = "Lecture Activity", x = "Date", y = "") 
+lectures
 
-# Total lecture views
-lvt <- ggplot(daily, aes(x=date, y=lecture_view_total, group=session)) + geom_line()
-lvt <- lvt + labs(title = "Total Video Views") 
-lvt
+# Total Forum Posts and Comments
+fpc <- ggplot(daily_slice, aes(x=item, group=session, colour = Activity))
+fpc <- fpc + geom_line(aes(y=forum_post_total, colour = "Posts"), size = 1)
+fpc <- fpc + geom_line(aes(y=forum_comment_total, colour = "Comments"), size = 1)
+fpc <- fpc + labs(title = "Forum Posts and Comments by Date", x = "Date", y = "") 
+fpc
 
-# Unique lecture views
-lvu <- ggplot(daily, aes(x=date, y=lecture_view_unique, group=session)) + geom_line()
-lvu <- lvu + labs(title = "Unique Video Views") 
-lvu
-
-# Total of all quiz submissions
-q1t <- ggplot(daily, aes(x=date, y=quiz_quiz_total, group=session)) + geom_line()
-q1t <- q1t + labs(title = "Total Quiz 1 Submissions by Date") 
-q1t
-
-# Histogram of all quiz submissions
-q1th <- ggplot(daily, aes(x=date, y=quiz_quiz_total, group=session)) 
-q1th <- q1th + geom_bar(binwidth=.5, colour="black", fill="white", stat="identity")
-q1th <- q1th + labs(title = "Total Quiz 1 Submissions by Date", x = "Date", y = "Quiz Submissions") 
-q1th
-
-# Unique quiz submissions
-q1u <- ggplot(daily, aes(x=date, y=quiz_quiz_unique, group=session)) + geom_line()
-q1u <- q1u + labs(title = "Individual Quiz Submissions by date") 
-q1u
-
-# Registrations
-reg <- ggplot(daily, aes(x=date, y=registrations, group=session)) + geom_line()
-reg <- reg + labs(title = "Week 1 Registrations per Day") 
-reg
+# Quiz Submission by Date
+quiz <- ggplot(daily_slice, aes(x=item, y=quiz_quiz_total, group=session)) 
+quiz <- quiz + geom_bar(binwidth=.5, colour="black", fill="white", stat="identity")
+quiz <- quiz + labs(title = "Total Quiz Submissions by Date", x = "Date", y = "Quiz Submissions") 
+quiz
