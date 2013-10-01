@@ -3,13 +3,12 @@
 # https://github.com/samuelcrane
 #
 # R code
-# Updated: 2013-09-30
 # Time Series plots for weekly or daily activity data from Coursera MOOC data
 # Transpose the CSV file before reading it. 
 
 library('ggplot2')
 
-# Read in and parse daily activity
+# Read in daily activity
 # Before this step, I've transposed the CSV file that Coursera provides under the Data -> Download Statistics
 daily <- read.csv("daily.csv")
 # Subset the data by a week or a few days
@@ -20,18 +19,6 @@ daily_slice <- cbind(daily_slice, session = "amnhgenetics001")
 weekly <- read.csv("weekly_summary.csv")
 weekly_slice <- weekly[157:159,]
 weekly_slice <- cbind(weekly_slice, session = "amnhgenetics001")
-
-
-# Faceted bar charts of Quiz Question responses
-# The input CSV file here is a cleaned version of the Quiz Summary TXT file that Coursera provides
-# See example quiz_response_table.csv file
-quizResp <- read.csv('quiz_response_table.csv')
-quizNumber <- "Quiz 3 Question Responses"
-qh <- ggplot(quizResp, aes(x=option, y=responses)) 
-qh <- qh + geom_bar(binwidth=.5, colour="black", fill="white", stat="identity")
-qh <- qh + facet_grid(. ~ question)
-qh <- qh + labs(title = quizNumber, x = "Question Option", y = "Number of Responses") 
-qh
 
 # Combined plot of daily activity
 snapshot <- ggplot(daily_slice, aes(x=item, colour = Activity)) 
