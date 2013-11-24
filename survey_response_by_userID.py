@@ -46,12 +46,12 @@
 import csv
 
 # Open the Coursera-provided CSV file.
-surveyfile_path = '/Users/sc/Dropbox/data/Earth/surveys/precourse/build/input/'
+surveyfile_path = '/Earth/surveys/precourse/build/input/'
 surveyfile_name = '[00000043] CSV Quiz Responses [17].csv'
 surveyfile = open(surveyfile_path + surveyfile_name, 'r')
 
 # Specify output path and output file names
-outputfile_path = '/Users/sc/Dropbox/data/Earth/surveys/precourse/build/output/'
+outputfile_path = '/Earth/surveys/precourse/build/output/'
 replace_name = 'precourse_responses.csv'
 
 # Identify the columns that correspond to checkbox-style questions
