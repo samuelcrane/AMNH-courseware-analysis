@@ -13,7 +13,7 @@ clickstream = []
 for row in reader:
     clickstream.append(row)
 
-# List of page URLS for course videos
+# List of page URLS for course essays
 essay_URLS = [
 'https://class.coursera.org/amnhgenetics-001/wiki/view?page=Genetics_Short_History',
 'https://class.coursera.org/amnhgenetics-001/wiki/view?page=Nature_Nurture',
